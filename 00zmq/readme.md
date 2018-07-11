@@ -10,6 +10,8 @@ $ (cd $TARGETDIR && find . -name "*.py" | grep -v lib/ | xargs grep zmq -l 2>/de
 
 jupyter-consoleのあたりを見ると良いかもしれない。jupyter_consoleのrepository。
 
+:warning: その前にjupyter系のアプリのmainの書き方を把握しないとダメそう。
+
 特に重要なものはなさそう？
 
 ```console
