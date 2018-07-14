@@ -1,30 +1,3 @@
-## zmqを使っている部分を調べてみる
-
-```
-$ TARGETDIR=~/venvs/viz
-$ mkdir -p data
-$ (cd $TARGETDIR && find . -name "*.py" | grep -v lib/ | xargs grep zmq -l 2>/dev/null) | sort > data/zmq.files
-```
-
-[./data/zmq.files](./data/zmq.files)
-
-jupyter-consoleのあたりを見ると良いかもしれない。jupyter_consoleのrepository。
-
-:warning: その前にjupyter系のアプリのmainの書き方を把握しないとダメそう。
-
-特に重要なものはなさそう？
-
-```console
-grep "^class ZMQ"  -r ../../jupyter_console/
-../../jupyter_console/jupyter_console/tests/test_image_handler.py:class ZMQTerminalInteractiveShellTestCase(unittest.TestCase):
-../../jupyter_console/jupyter_console/zmqhistory.py:class ZMQHistoryManager(HistoryAccessorBase):
-../../jupyter_console/jupyter_console/ptshell.py:class ZMQTerminalInteractiveShell(SingletonConfigurable):
-../../jupyter_console/jupyter_console/app.py:class ZMQTerminalIPythonApp(JupyterApp, JupyterConsoleApp):
-../../jupyter_console/jupyter_console/completer.py:class ZMQCompleter(Configurable):
-```
-
-どうも色々adapterを書かないといけない模様？
-
 ```console
 $ pyinspect inspect jupyter_console.zmqhistory:ZMQHistoryManager
 jupyter_console.zmqhistory.ZMQHistoryManager <- IPython.core.history.HistoryAccessorBase <- traitlets.config.configurable.LoggingConfigurable <- traitlets.config.configurable.Configurable <- traitlets.traitlets.HasTraits <- traitlets.traitlets.HasDescriptors <- builtins.object
@@ -440,3 +413,4 @@ traitlets.traitlets.HasDescriptors <- builtins.object
     [static method, OVERRIDE] __new__(cls, *args, **kwargs)
     [method] setup_instance(self, *args, **kwargs)
 ```
+
