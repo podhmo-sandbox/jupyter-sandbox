@@ -56,6 +56,7 @@ traitlets.traitlets.HasTraits <- traitlets.traitlets.HasDescriptors <- builtins.
         [class method] class_traits(**metadata)
     [class method] class_trait_names(**metadata)
         [class method] class_traits(**metadata)
+    [property] cross_validation_lock
     [method] on_trait_change(self, handler=None, name=None, remove=False)
         [method] unobserve(self, handler, names=traitlets.All, type='change')
             [method] _remove_notifiers(self, handler, name, type)
@@ -183,6 +184,7 @@ traitlets.traitlets.HasTraits <- traitlets.traitlets.HasDescriptors <- builtins.
         [class method] class_traits(**metadata)
     [class method] class_trait_names(**metadata)
         [class method] class_traits(**metadata)
+    [property] cross_validation_lock
     [method] on_trait_change(self, handler=None, name=None, remove=False)
         [method] unobserve(self, handler, names=traitlets.All, type='change')
             [method] _remove_notifiers(self, handler, name, type)
@@ -198,8 +200,6 @@ traitlets.traitlets.HasTraits <- traitlets.traitlets.HasDescriptors <- builtins.
 traitlets.traitlets.HasDescriptors <- builtins.object
     [static method, OVERRIDE] __new__(cls, *args, **kwargs)
     [method] setup_instance(self, *args, **kwargs)
-
-
 ```
 
 ```console
@@ -222,8 +222,10 @@ jupyter_core.application.JupyterApp <- traitlets.config.application.Application 
     [method] _runtime_dir_changed(self, new)
     [method] _runtime_dir_default(self)
     [method, OVERRIDE] initialize(self, argv=None)
+        [property] _dispatching
         [method] migrate_config(self)
         [method, OVERRIDE] load_config_file(self, suppress_errors=True)
+            [property] config_file_paths
         [method] _find_subcommand(self, name)
     [class method, OVERRIDE] launch_instance(argv=None, **kwargs)
     [method, OVERRIDE] start(self)
@@ -278,6 +280,7 @@ jupyter_client.connect.ConnectionFileMixin <- traitlets.config.configurable.Logg
     [method] blocking_client(self)
         [method] get_connection_info(self, session=False)
     [method] cleanup_ipc_files(self)
+        [property] ports
     [method] cleanup_random_ports(self)
         [method] cleanup_connection_file(self)
     [method] connect_control(self, identity=None)
@@ -339,6 +342,7 @@ traitlets.traitlets.HasTraits <- traitlets.traitlets.HasDescriptors <- builtins.
         [class method] class_traits(**metadata)
     [class method] class_trait_names(**metadata)
         [class method] class_traits(**metadata)
+    [property] cross_validation_lock
     [method] on_trait_change(self, handler=None, name=None, remove=False)
         [method] unobserve(self, handler, names=traitlets.All, type='change')
             [method] _remove_notifiers(self, handler, name, type)
@@ -397,6 +401,7 @@ traitlets.traitlets.HasTraits <- traitlets.traitlets.HasDescriptors <- builtins.
         [class method] class_traits(**metadata)
     [class method] class_trait_names(**metadata)
         [class method] class_traits(**metadata)
+    [property] cross_validation_lock
     [method] on_trait_change(self, handler=None, name=None, remove=False)
         [method] unobserve(self, handler, names=traitlets.All, type='change')
             [method] _remove_notifiers(self, handler, name, type)
