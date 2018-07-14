@@ -205,7 +205,7 @@ class KernelManager(ConnectionFileMixin):
 start_kernelは。。 ConsoleAppの `init_kernel_manager()` あたりで呼ばれていそう（ちなみに、kernelappのstart()で呼ばれる）。
 
 ```python
-
+class JupyterConsoleApp(ConnectionFileMixin):
 #...
 
     def init_kernel_manager(self):
@@ -222,7 +222,6 @@ KernelAppとConsoleAppの使い分けがよくわからない感じかも。
 ちなみに、init_kernel_manager自体は、 ZMQTerminalIPythonAppが継承しているJupyterConsoleAppのinitializeで呼ばれているみたい。
 
 ```
-
 jupyter_client.consoleapp.JupyterConsoleApp <- jupyter_client.connect.ConnectionFileMixin <- traitlets.config.configurable.LoggingConfigurable <- traitlets.config.configurable.Configurable <- traitlets.traitlets.HasTraits <- traitlets.traitlets.HasDescriptors <- builtins.object
     [method] _connection_file_default(self)
     [method] _new_connection_file(self)
@@ -232,5 +231,53 @@ jupyter_client.consoleapp.JupyterConsoleApp <- jupyter_client.connect.Connection
         [method] init_ssh(self)
         [method] init_kernel_manager(self)
         [method] init_kernel_client(self)
+```
+
+そろそろkernel manager的なものの動きとかを見ないとダメかも。
+
+client.executeが呼ばれている感じ。managerの使いみちが分からず。ZMQTerminalInteractiveShell自体はmanagerを使っていなそう。
+tornadoのrunloop動かしているのか。jupyter_clientのlauncher.launch_kernelでkernelが作られる？
+
+client.executeの方から見たほうが良いかもしれない。
+
+kernel自体はこんなchannelを持っているのか。
+
+```
+There are four channels associated with each kernel:
+
+    * shell: for request/reply calls to the kernel.
+    * iopub: for the kernel to publish results to frontends.
+    * hb: for monitoring the kernel's heartbeat.
+    * stdin: for frontends to reply to raw_input calls in the kernel.
+```
+
+executeにはshell_channelに対してsendをする。
+
+Connection File is not found -> Starting Kernel
+
+```python
+class KernelClient(ConnectionFileMixin):
+#...
+    @property
+    def shell_channel(self):
+        """Get the shell channel object for this kernel."""
+        if self._shell_channel is None:
+            url = self._make_url('shell')
+            self.log.debug("connecting shell channel to %s", url)
+            socket = self.connect_shell(identity=self.session.bsession)
+            self._shell_channel = self.shell_channel_class(
+                socket, self.session, self.ioloop
+            )
+        return self._shell_channel
+```
+
+このshell channelはどうやって作られているんだろう？
+
+```python
+class ConnectionFileMixin(LoggingConfigurable):
+#...
+    def connect_shell(self, identity=None):
+        """return zmq Socket connected to the Shell channel"""
+        return self._create_connected_socket('shell', identity=identity)
 ```
 
