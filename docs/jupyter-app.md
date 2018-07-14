@@ -42,9 +42,36 @@ if __name__ == '__main__':
 
 謎
 
+- launch_instanceの処理は？
 - JupyterConsoleAppとは？
 - classesというのは？
-- launch_instanceの処理は？
+
+### launch_instance
+
+```pyton
+main = launch_new_instance = ZMQTerminalIPythonApp.launch_instance
+```
+
+launch instanceは以下の様な定義
+
+traitlets/config/application.py
+
+```python
+class Application(SingletonConfigurable):
+    @classmethod
+    def launch_instance(cls, argv=None, **kwargs):
+        """Launch a global instance of this Application
+
+        If a global instance already exists, this reinitializes and starts it
+        """
+        app = cls.instance(**kwargs)
+        app.initialize(argv)
+        app.start()
+```
+
+- 生成 -> instance
+- 初期化 -> initialize
+- 開始 -> start
 
 ### JupyterConsoleApp
 
@@ -53,11 +80,11 @@ jupyter_client.consoleapp.JupyterConsoleApp <- jupyter_client.connect.Connection
     [method] _connection_file_default(self)
     [method] _new_connection_file(self)
     [method] build_kernel_argv(self, argv=None)
-    [method] init_connection_file(self)
-    [method] init_kernel_client(self)
-    [method] init_kernel_manager(self)
-    [method] init_ssh(self)
     [method] initialize(self, argv=None)
+        [method] init_connection_file(self)
+        [method] init_ssh(self)
+        [method] init_kernel_manager(self)
+        [method] init_kernel_client(self)
 ```
 
 特にoverrideしているものはないらしい
@@ -69,23 +96,21 @@ jupyter_core.application.JupyterApp <- traitlets.config.application.Application 
     [method] _config_dir_default(self)
     [method] _config_file_name_default(self)
     [method] _data_dir_default(self)
-    [method] _find_subcommand(self, name)
     [method] _jupyter_path_default(self)
     [method] _log_level_default(self)
     [method] _runtime_dir_changed(self, new)
     [method] _runtime_dir_default(self)
     [method, OVERRIDE] initialize(self, argv=None)
-    [class method, OVERRIDE] launch_instance(argv=None, **kwargs) method of traitlets.traitlets.MetaHasTraits instance
-    [method, OVERRIDE] load_config_file(self, suppress_errors=True)
-    [method] migrate_config(self)
+        [method] migrate_config(self)
+        [method, OVERRIDE] load_config_file(self, suppress_errors=True)
+        [method] _find_subcommand(self, name)
+    [class method, OVERRIDE] launch_instance(argv=None, **kwargs)
     [method, OVERRIDE] start(self)
-    [method] write_default_config(self)
+        [method] write_default_config(self)
 ```
 
 http://traitlets.readthedocs.io/en/stable/index.html
 
 ### classes
-
-### launch_instance
 
 
